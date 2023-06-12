@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Users {
+  id String @id @default(uuid())
+  email String @db.VarChar(100) @unique 
+  password String @db.VarChar(255)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  skills UsersHavingSkills[]
+}
+
+model UsersDetail {
+  id String @id @default(uuid())
+  first_name String @db.VarChar(255)
+  last_name String? @db.VarChar(255)
+  photo String @db.VarChar(100) @default("no-photo.png" )
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Skills {
+  id String @id @default(uuid())
+  name String @db.VarChar(100)
+  working_experience Int @db.Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  users UsersHavingSkills[]
+  portfolios PortfoliosCreatedWithSkills[]
+}
+
+model UsersHavingSkills {
+  user_id String
+  user Users @relation(fields: user_id, references: [id])
+
+  skills_id String
+  skill Skills @relation(fields: skills_id, references: [id])
+
+  @@id([user_id, skills_id])
+}
+
+model Portfolios {
+  id String @id @default(uuid())
+  title String @db.VarChar(100)
+  description String @db.LongText
+  photo String @db.VarChar(100)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  skills PortfoliosCreatedWithSkills[]
+
+  @@index([title])
+}
+
+model PortfoliosCreatedWithSkills {
+  portfolio_id String
+  portfolio Portfolios @relation(fields: portfolio_id, references: [id])
+
+  skill_id String
+  skill Skills @relation(fields: skill_id, references: [id])
+
+  @@id([skill_id, portfolio_id])
+}
