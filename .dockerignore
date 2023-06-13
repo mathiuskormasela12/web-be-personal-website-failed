@@ -1,0 +1,19 @@
+# Files
+.env
+.env.example
+.eslintrc.js
+.gitignore
+.prettierrc
+README.md
+package-lock.json
+Dockerfile
+docker-compose.yml
+docker-compose-dev.yml
+docker-compose-prod.yml
+docker-compose-staging.yml
+
+# Folders
+/node_modules
+/test
+/dist
+/public

@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  web-be-personal-website-db:
+    environment:
+      - MYSQL_DATABASE=web_be_personal_website_dev
+      - MYSQL_ROOT_PASSWORD=root
+  
+  web-be-personal-website:
+    environment:
+      - SERVICE_WEB_CLIENTS=http://localhost:3000
+      - DATABASE_URL=mysql://root:root@web-be-personal-website-db/web_be_personal_website_dev?schema=public
+      - SERVICE_JWT_ACCESS_TOKEN_SECRET_KEY=secret123
+      - SERVICE_JWT_ACCESS_TOKEN_EXPIRES_IN=5m
+      - SERVICE_JWT_REFRESH_TOKEN_SECRET_KEY=secret321
+      - SERVICE_JWT_REFRESH_TOKEN_EXPIRES_IN=15m
+      - SERVICE_RATE_LIMITER_TTL=60
+      - SERVICE_RATE_LIMITER_LIMIT=60

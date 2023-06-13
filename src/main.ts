@@ -64,7 +64,7 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(appPort);
+  await app.listen(appPort, '0.0.0.0');
   Logger.log(`The Personal Website RESTful API is being run at ${appUrl}`);
 }
 bootstrap();

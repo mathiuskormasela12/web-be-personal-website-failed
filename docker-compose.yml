@@ -1,0 +1,62 @@
+version: "3.8"
+
+networks:
+  web-be-personal-website-network:
+    name: web-be-personal-website-network
+    driver: bridge
+
+volumes:
+  web-be-personal-website-db-vol:
+    name: web-be-personal-website-db-vol
+
+services:
+  web-be-personal-website-db:
+    container_name: web-be-personal-website-db
+    image: mysql:latest
+    networks:
+      - web-be-personal-website-network
+    volumes:
+      - type: volume
+        source: web-be-personal-website-db-vol
+        target: /var/lib/mysql
+        read_only: false
+    ports:
+      - protocol: tcp
+        published: 3307
+        target: 3306
+    deploy:
+      resources:
+        reservations:
+          cpus: "0.5"
+          memory: "500M"
+        limits:
+          cpus: "0.5"
+          memory: "700M"
+    restart: always
+  
+  web-be-personal-website:
+    container_name: web-be-personal-website
+    image: mathius12/web-be-personal-website:1.0.0
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    deploy:
+      resources:
+        reservations:
+          cpus: "0.5"
+          memory: "500M"
+        limits:
+          cpus: "0.5"
+          memory: "700M"
+    networks:
+      - web-be-personal-website-network
+    ports:
+      - protocol: tcp
+        published: 9000
+        target: 8080
+    depends_on:
+      - web-be-personal-website-db
+    restart: always
+    environment:
+      SERVICE_APP_PORT: 8080
+      SERVICE_APP_URL: "http://localhost:9000"
