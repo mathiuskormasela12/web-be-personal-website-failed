@@ -17,3 +17,4 @@ docker-compose-staging.yml
 /test
 /dist
 /public
+/prisma/migrations
